@@ -44,19 +44,19 @@ func totalAppOpensHandler(w http.ResponseWriter, r *http.Request) {
 
 	if !ok || len(apiKey[0]) < 1 {
 
-		log.Println("Error: apiKey Query Parameter missing from request")
+		log.Println("[Action: incTotalAppOpens] [Response: 400 Bad Request (Missing apiKey)] [Client IP: " + r.RemoteAddr + "]")
 		response = responseMessage{"error", "The apiKey Query Parameter was missing from the request"}
 		missingParam = true
 
 	} else if !ok || len(deviceName[0]) < 1 {
 
-		log.Println("Error: deviceName Query Parameter missing from request")
+		log.Println("[Action: incTotalAppOpens] [Response: 400 Bad Request (Missing deviceName)] [Client IP: " + r.RemoteAddr + "]")
 		response = responseMessage{"error", "The deviceName Query Parameter was missing from the request"}
 		missingParam = true
 
 	} else if !ok || len(appName[0]) < 1 {
 
-		log.Println("Error: appName Query Parameter missing from request")
+		log.Println("[Action: incTotalAppOpens] [Response: 400 Bad Request (Missing appName)] [Client IP: " + r.RemoteAddr + "]")
 		response = responseMessage{"error", "The appName Query Parameter was missing from the request"}
 		missingParam = true
 
@@ -80,8 +80,7 @@ func totalAppOpensHandler(w http.ResponseWriter, r *http.Request) {
 
 	if apiKey[0] != registeredAPIKey {
 
-		log.Println("Error: Invalid API Key Specified")
-
+		log.Println("[Action: incTotalAppOpens] [Response: 401 Unauthorized] [Client IP: " + r.RemoteAddr + "]")
 		response := responseMessage{"error", "The apiKey specified was invalid"}
 
 		js, err := json.Marshal(response)
@@ -98,11 +97,10 @@ func totalAppOpensHandler(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	// Successful  Counter Increment
-	log.Println("Incremented Prometheus Counter for " + string(appName[0]) + " on device: " + string(deviceName[0]) + ".")
-
+	// Increment Counter and Return Response
 	appOpens.With(prometheus.Labels{"appName": appName[0], "deviceName": deviceName[0]}).Inc()
 
+	log.Println("[Action: incTotalAppOpens] [Response: 200 OK] [Client IP: " + r.RemoteAddr + "] [Device: " + string(deviceName[0]) + "] [App: " + string(appName[0]) + "]")
 	response = responseMessage{"success", "Incremented Prometheus Counter for " + string(appName[0]) + " on device: " + string(deviceName[0]) + "."}
 
 	js, err := json.Marshal(response)
