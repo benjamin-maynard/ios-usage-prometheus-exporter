@@ -8,6 +8,6 @@ COPY ./ios-usage-prometheus-exporter/ /go/src/github.com/benjamin-maynard/ios-us
 RUN go install github.com/benjamin-maynard/ios-usage-prometheus-exporter/ios-usage-prometheus-exporter
 
 ENV PROMETHEUS_PORT=9090
-ENV TARGET_DATABASE_PORT=80
+ENV WEBSERVER_PORT=80
 
 ENTRYPOINT /go/bin/ios-usage-prometheus-exporter
