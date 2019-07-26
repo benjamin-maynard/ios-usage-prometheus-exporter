@@ -4,7 +4,9 @@ services:
    ios-usage-prometheus-exporter:
     build: .
     ports:
-     - "8080:8080"
+     - "80:80"
      - "9001:9001"
     environment:
      - API_KEY=0123456789
+     - PROMETHEUS_PORT=9090
+     - WEBSERVER_PORT=80
