@@ -1,12 +1,24 @@
 package main
 
 import (
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+var registeredAPIKey string
+
 func main() {
+
+	// Check and set API_KEY Environment Variable
+	registeredAPIKey = os.Getenv("API_KEY")
+	if len(registeredAPIKey) == 0 {
+		log.Fatal("The API_KEY Environment Variable was not set")
+	} else if len(registeredAPIKey) < 10 {
+		log.Fatal("The API_KEY is not a sufficient length, please ensure it is at least 10 characters long")
+	}
 
 	// Setup HTTP Server for Prometheus Metrics Endpoint. Run it as a Goroutine so it doesn't block
 	promServer := http.NewServeMux()

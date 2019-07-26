@@ -6,3 +6,5 @@ services:
     ports:
      - "8080:8080"
      - "9001:9001"
+    environment:
+     - API_KEY=0123456789

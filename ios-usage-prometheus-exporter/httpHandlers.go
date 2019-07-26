@@ -78,7 +78,7 @@ func totalAppOpensHandler(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	if apiKey[0] != "123" {
+	if apiKey[0] != registeredAPIKey {
 
 		log.Println("Error: Invalid API Key Specified")
 
