@@ -28,7 +28,7 @@ func main() {
 	// Setup HTTP Server for API to Receive Metrics
 	reportingServer := http.NewServeMux()
 	reportingServer.HandleFunc("/", defaultHandler)
-	reportingServer.HandleFunc("/api/v1.0/totalAppOpens/", totalAppOpensHandler)
+	reportingServer.HandleFunc("/api/v1.0/incTotalAppOpens/", totalAppOpensHandler)
 	http.ListenAndServe(":8080", reportingServer)
 
 }
