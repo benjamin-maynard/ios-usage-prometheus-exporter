@@ -61,12 +61,7 @@ func totalAppOpensHandler(w http.ResponseWriter, r *http.Request) {
 
 	if missingParam == true {
 
-		js, err := json.Marshal(response)
-
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+		js, _ := json.Marshal(response)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
