@@ -32,29 +32,29 @@ func defaultHandler(w http.ResponseWriter, r *http.Request) {
 // HTTP Handler for totalAppOpens
 func totalAppOpensHandler(w http.ResponseWriter, r *http.Request) {
 
-	apiKey, apiKeyOk := r.URL.Query()["apiKey"]
-	deviceName, deviceNameOk := r.URL.Query()["deviceName"]
-	appName, appNameOk := r.URL.Query()["appName"]
+	apiKey := r.Header.Get("apiKey")
+	deviceName := r.Header.Get("deviceName")
+	appName := r.Header.Get("appName")
 
 	var response responseMessage
 	var missingParam bool
 
-	if !apiKeyOk || len(apiKey[0]) < 1 {
+	if len(apiKey) < 1 {
 
 		log.Println("[Action: incTotalAppOpens] [Response: 400 Bad Request (Missing apiKey)] [Client IP: " + r.RemoteAddr + "]")
-		response = responseMessage{"error", "The apiKey Query Parameter was missing from the request"}
+		response = responseMessage{"error", "The apiKey Header was missing from the request"}
 		missingParam = true
 
-	} else if !deviceNameOk || len(deviceName[0]) < 1 {
+	} else if len(deviceName) < 1 {
 
 		log.Println("[Action: incTotalAppOpens] [Response: 400 Bad Request (Missing deviceName)] [Client IP: " + r.RemoteAddr + "]")
-		response = responseMessage{"error", "The deviceName Query Parameter was missing from the request"}
+		response = responseMessage{"error", "The deviceName Header was missing from the request"}
 		missingParam = true
 
-	} else if !appNameOk || len(appName[0]) < 1 {
+	} else if len(appName) < 1 {
 
 		log.Println("[Action: incTotalAppOpens] [Response: 400 Bad Request (Missing appName)] [Client IP: " + r.RemoteAddr + "]")
-		response = responseMessage{"error", "The appName Query Parameter was missing from the request"}
+		response = responseMessage{"error", "The appName Header was missing from the request"}
 		missingParam = true
 
 	}
@@ -70,7 +70,7 @@ func totalAppOpensHandler(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	if apiKey[0] != registeredAPIKey {
+	if apiKey != registeredAPIKey {
 
 		log.Println("[Action: incTotalAppOpens] [Response: 401 Unauthorized] [Client IP: " + r.RemoteAddr + "]")
 		response := responseMessage{"error", "The apiKey specified was invalid"}
@@ -90,10 +90,10 @@ func totalAppOpensHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Increment Counter and Return Response
-	appOpens.With(prometheus.Labels{"appName": appName[0], "deviceName": deviceName[0]}).Inc()
+	appOpens.With(prometheus.Labels{"appName": appName, "deviceName": deviceName}).Inc()
 
-	log.Println("[Action: incTotalAppOpens] [Response: 200 OK] [Client IP: " + r.RemoteAddr + "] [Device: " + string(deviceName[0]) + "] [App: " + string(appName[0]) + "]")
-	response = responseMessage{"success", "Incremented Prometheus Counter for " + string(appName[0]) + " on device: " + string(deviceName[0]) + "."}
+	log.Println("[Action: incTotalAppOpens] [Response: 200 OK] [Client IP: " + r.RemoteAddr + "] [Device: " + string(deviceName) + "] [App: " + string(appName) + "]")
+	response = responseMessage{"success", "Incremented Prometheus Counter for " + string(appName) + " on device: " + string(deviceName) + "."}
 
 	js, err := json.Marshal(response)
 
