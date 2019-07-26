@@ -38,11 +38,13 @@ func main() {
 	}
 
 	// Setup HTTP Server for Prometheus Metrics Endpoint. Run it as a Goroutine so it doesn't block
+	log.Println("Starting Prometheus Web Server on Port: " + promPort + ".")
 	promServer := http.NewServeMux()
 	promServer.Handle("/metrics", promhttp.Handler())
 	go http.ListenAndServe(":"+promPort, promServer)
 
 	// Setup HTTP Server for API to Receive Metrics
+	log.Println("Starting Reporting API Web Server on Port: " + wsPort + ".")
 	reportingServer := http.NewServeMux()
 	reportingServer.HandleFunc("/", defaultHandler)
 	reportingServer.HandleFunc("/api/v1.0/incTotalAppOpens/", totalAppOpensHandler)
