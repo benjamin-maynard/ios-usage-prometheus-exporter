@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"regexp"
 
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -75,12 +76,7 @@ func totalAppOpensHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("[Action: incTotalAppOpens] [Response: 401 Unauthorized] [Client IP: " + r.RemoteAddr + "]")
 		response := responseMessage{"error", "The apiKey specified was invalid"}
 
-		js, err := json.Marshal(response)
-
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+		js, _ := json.Marshal(response)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusUnauthorized)
@@ -88,6 +84,16 @@ func totalAppOpensHandler(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
+
+	// Ensure appName and deviceName are formatted nicely : Credit: https://golangcode.com/how-to-remove-all-non-alphanumerical-characters-from-a-string/
+	reg, err := regexp.Compile("[^a-zA-Z0-9]+")
+	if err != nil {
+		log.Println("[Action: incTotalAppOpens] [Response: 500 Internal Server Error] [Client IP: " + r.RemoteAddr + "] [Error: Errror Removing Special Characters")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	appName = reg.ReplaceAllString(appName, "")
+	deviceName = reg.ReplaceAllString(deviceName, "")
 
 	// Increment Counter and Return Response
 	appOpens.With(prometheus.Labels{"appName": appName, "deviceName": deviceName}).Inc()
@@ -98,6 +104,7 @@ func totalAppOpensHandler(w http.ResponseWriter, r *http.Request) {
 	js, err := json.Marshal(response)
 
 	if err != nil {
+		log.Println("[Action: incTotalAppOpens] [Response: 500 Internal Server Error] [Client IP: " + r.RemoteAddr + "] [Error: Errror Marshalling JSON Response")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
