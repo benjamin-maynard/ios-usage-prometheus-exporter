@@ -35,26 +35,26 @@ func defaultHandler(w http.ResponseWriter, r *http.Request) {
 // HTTP Handler for totalAppOpens
 func totalAppOpensHandler(w http.ResponseWriter, r *http.Request) {
 
-	apiKey, ok := r.URL.Query()["apiKey"]
-	deviceName, ok := r.URL.Query()["deviceName"]
-	appName, ok := r.URL.Query()["appName"]
+	apiKey, apiKeyOk := r.URL.Query()["apiKey"]
+	deviceName, deviceNameOk := r.URL.Query()["deviceName"]
+	appName, appNameOk := r.URL.Query()["appName"]
 
 	var response responseMessage
 	var missingParam bool
 
-	if !ok || len(apiKey[0]) < 1 {
+	if !apiKeyOk || len(apiKey[0]) < 1 {
 
 		log.Println("[Action: incTotalAppOpens] [Response: 400 Bad Request (Missing apiKey)] [Client IP: " + r.RemoteAddr + "]")
 		response = responseMessage{"error", "The apiKey Query Parameter was missing from the request"}
 		missingParam = true
 
-	} else if !ok || len(deviceName[0]) < 1 {
+	} else if !deviceNameOk || len(deviceName[0]) < 1 {
 
 		log.Println("[Action: incTotalAppOpens] [Response: 400 Bad Request (Missing deviceName)] [Client IP: " + r.RemoteAddr + "]")
 		response = responseMessage{"error", "The deviceName Query Parameter was missing from the request"}
 		missingParam = true
 
-	} else if !ok || len(appName[0]) < 1 {
+	} else if !appNameOk || len(appName[0]) < 1 {
 
 		log.Println("[Action: incTotalAppOpens] [Response: 400 Bad Request (Missing appName)] [Client IP: " + r.RemoteAddr + "]")
 		response = responseMessage{"error", "The appName Query Parameter was missing from the request"}
