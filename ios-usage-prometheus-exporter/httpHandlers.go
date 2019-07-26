@@ -17,13 +17,10 @@ type responseMessage struct {
 // Define  a default handler for 404 errors
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
 
-	response := responseMessage{"error", "Page not found"}
-	js, err := json.Marshal(response)
+	log.Println("[Response: 404 Not Found] [Client IP: " + r.RemoteAddr + "] [Request URI: " + r.RequestURI + "]")
 
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	response := responseMessage{"error", "Page not found"}
+	js, _ := json.Marshal(response)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusNotFound)
