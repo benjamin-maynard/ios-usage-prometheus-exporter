@@ -1,0 +1,8 @@
+version: '3'
+services:
+
+   ios-usage-prometheus-exporter:
+    build: .
+    ports:
+     - "8080:8080"
+     - "9001:9001"
