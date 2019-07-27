@@ -35,7 +35,7 @@ These are exported via the `ios_app_open_total` Promethus Counter Metric. This m
 
 1. Create a new Personal Automation in iOS 13
 2. Define a trigger of "Open App" and select Instagram
-3. Add the `Get contents of URL` Trigger
+3. Add the `Get contents of URL` Action
 4. Enter the FQDN of your instance of ios-usage-prometheus-exporter, followed by the `incTotalAppOpens` API endpoint. For example: `https://ios-metrics-reporter.maynard.io/api/v1.0/incTotalAppOpens/`
 5. Add the 3 headers: `apiKey`, `deviceName` and `appName` and their associated values.
 6. Save and ensure the "Ask Before Running" option is not selected.
