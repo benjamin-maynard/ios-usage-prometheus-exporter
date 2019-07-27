@@ -20,6 +20,27 @@ These are exported via the `ios_app_open_total` Promethus Counter Metric. This m
 1. `deviceName`: Derived from the `deviceName` HTTP header, used for aggregating stats across multiple devices.
 2. `appName`: Derived from th `appName` HTTP header, used for identifying individual, or groups of applications.
 
+### HTTP Request
+`GET https://<YOUR-FQDN>/api/v1.0/incTotalAppOpens/`
+
+### Headers
+
+| Header      | Purpose                                                                                                                                             | Default   | Required  |
+| ---         | ---                                                                                                                                                 | ---       | ---       |
+| apiKey      | The API key that you defined in your configuration for authentication.                                                                              | None      | true      |
+| deviceName  | The Device Name that the metrics are for. Used in the `deviceName` metric label. Alphanumeric only, special characters and spaces will be removed.  | None      | true      |
+| appName     | The App Name (e.g Instagram) or group name (e.g. Social). Used in the `appName` metric label. Alphanumeric only, special characters and spaces will be removed.                                                                                                                                                                                          | None      | true      |
+
+### Example Usage - Instagram
+
+1. Create a new Personal Automation in iOS 13
+2. Define a trigger of "Open App" and select Instagram
+3. Add the `Get contents of URL` Trigger
+4. Enter the FQDN of your instance of ios-usage-prometheus-exporter, followed by the `incTotalAppOpens` API endpoint. For example: `https://ios-metrics-reporter.maynard.io/api/v1.0/incTotalAppOpens/`
+5. Add the 3 headers: `apiKey`, `deviceName` and `appName` and their associated values.
+6. Save and ensure the "Ask Before Running" option is not selected.
+7. Open Instagram
+8. Validate success by running the `ios_app_open_total` Prometheus Query
 
 ## Deployment and Configuration
 
@@ -36,19 +57,3 @@ The following environment variables are used by ios-usage-prometheus-exporter fo
 | API_KEY               | A secure API Key that will be validated against the `apiKey` header in requests. **This should be created as a K8s secret.**  | None      | true      |
 | PROMETHEUS_PORT       | The port to use for the webserver that exposes the `/metrics` Prometheus endpoint.                                            | 9090      | false     |
 | WEBSERVER_PORT        | The port to use for the webserver that exposes the ios-usage-prometheus-exporter REST API                                     | 80        | false     |
-
-
-## Example Usage - Measuring App Usage
-
-The new iOS 13 Shortcuts application enables users to define Personal Automations, which are actions that are performed on the back of certain activities, for example opening the Instagram App.
-
-This application works by using the `Get Contents of URL` action in iOS 13 to perform API calls when these actions are performed.
-
-For example - to increment a Prometheus Counter each time the Instagram application is opened, you would do the following:
-
-1. Create a new Personal Automation in iOS 13
-2. Define a trigger of "Open App" and select Instagram
-3. Add the `Get contents of URL` Trigger
-4. Enter the FQDN of your instance of ios-usage-prometheus-exporter, followed by the `incTotalAppOpens` API endpoint. For example: `https://ios-metrics-reporter.maynard.io/api/v1.0/incTotalAppOpens/`
-5. Add 3 headers: `apiKey`, `deviceName` and `appName` and their associated values.
-6. Save and ensure the "Ask Before Running" option is not selected.
