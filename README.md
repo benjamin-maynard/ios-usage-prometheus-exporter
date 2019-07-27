@@ -4,7 +4,9 @@ ios-usage-prometheus-exporter is a Prometheus Exporter, written in Golang that a
 
 ## Deployment and Configuration
 
-ios-usage-prometheus-exporter is designed to be deployed in Kubernetes, the API Webserver Port (defined by the `WEBSERVER_PORT` environment variable) should be exposed externally so that your iOS device can make API calls based on your defined triggers. It is strongly recommended that expose ios-usage-prometheus-exporter using HTTPS. SSL/TLS should be configured on your Load Balancer (or ingress if using something like ingress-nginx).
+ios-usage-prometheus-exporter is designed to be deployed in Kubernetes, 
+
+The API Webserver Port (defined by the `WEBSERVER_PORT` environment variable) should be exposed externally so that your iOS device can make API calls based on your defined triggers. It is strongly recommended that expose ios-usage-prometheus-exporter using HTTPS. SSL/TLS should be configured on your Load Balancer (or ingress if using something like ingress-nginx).
 
 Service discovery in Kubernetes should be used for scraping the metrics, which are exposed via a seperate port (defined by the `PROMETHEUS_PORT` environment variable). This should not be exposed externally. 
 
