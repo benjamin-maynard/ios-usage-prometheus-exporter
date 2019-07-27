@@ -2,6 +2,20 @@
 
 ios-usage-prometheus-exporter is a Prometheus Exporter, written in Golang that allows metrics from certain actions in iOS 13 to be exported into Prometheus. It centers around a HTTP RESTful API, that can be called using the new Shortcuts application available in iOS 13 based on certain triggers. Metrics are exported via the `/metrics` endpoint, that listens on a different port to the main API.
 
+It operates in a very similar fashion to Prometheus Pushgateway, however, due to the fact that Pushgateway is only "vaguely REST-like", the iOS `Get Contents of URL` doesn't play nicely with it. It also has no authentication which makes it challenging to expose externally (which is essential for a roaming iOS device).
+
+## What possible use case could you have for this?
+
+I created this as a fun little side project, primarily because I was bored. But I also wanted to track my usage of social media and make a conscious effort to reduce th amount of times I was opening my social media apps.
+
+## Supported Functions
+
+Currently there is only one supported function type which is the `incTotalAppOpens` endpoint that tracks how many times an application is opened. This will be expanded with other useful metrics over time.
+
+### `incTotalAppOpens` Endpoint
+
+TBD
+
 ## Deployment and Configuration
 
 ios-usage-prometheus-exporter is designed to be deployed in Kubernetes, 
