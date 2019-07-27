@@ -1,6 +1,6 @@
 # ios-usage-prometheus-exporter
 
-ios-usage-prometheus-exporter is a Prometheus Exporter, written in Golang that allows metrics from certain actions in iOS 13 to be exported into Prometheus. It centers around a HTTP RESTful API, that can be called using the new Shortcuts application available in iOS 13 based on certain triggers. Metrics are exported via the `/metrics` endpoint, that listens on a different port to the main API.
+ios-usage-prometheus-exporter is a Prometheus Exporter, written in Golang that allows metrics from certain actions in iOS 13 to be exported into Prometheus. It centres around a HTTP RESTful API, that can be called using the new Shortcuts application available in iOS 13 based on certain triggers. Metrics are exported via the `/metrics` endpoint, that listens on a different port to the main API.
 
 It operates in a very similar fashion to Prometheus Pushgateway, however, due to the fact that Pushgateway is only "vaguely REST-like", the iOS `Get Contents of URL` doesn't play nicely with it. It also has no authentication which makes it challenging to expose externally (which is essential for a roaming iOS device).
 
@@ -16,7 +16,7 @@ Currently there is only one supported function type which is the `incTotalAppOpe
 
 The `incTotalAppOpens` endpoint is used for incrementing a Prometheus Counter each time an application (or group of applications) are opened. Counter increments are performed by making a HTTP Get request via the iOS 13 `Get Contents of URL` action.
 
-These are exported via the `ios_app_open_total` Promethus Counter Metric. This metric has two labels:
+These are exported via the `ios_app_open_total` Prometheus Counter Metric. This metric has two labels:
 1. `deviceName`: Derived from the `deviceName` HTTP header, used for aggregating stats across multiple devices.
 2. `appName`: Derived from th `appName` HTTP header, used for identifying individual, or groups of applications.
 
@@ -48,7 +48,7 @@ ios-usage-prometheus-exporter is designed to be deployed in Kubernetes,
 
 The API Webserver Port (defined by the `WEBSERVER_PORT` environment variable) should be exposed externally so that your iOS device can make API calls based on your defined triggers. It is strongly recommended that expose ios-usage-prometheus-exporter using HTTPS. SSL/TLS should be configured on your Load Balancer (or ingress if using something like ingress-nginx).
 
-Service discovery in Kubernetes should be used for scraping the metrics, which are exposed via a seperate port (defined by the `PROMETHEUS_PORT` environment variable). This should not be exposed externally. 
+Service discovery in Kubernetes should be used for scraping the metrics, which are exposed via a separate port (defined by the `PROMETHEUS_PORT` environment variable). This should not be exposed externally. 
 
 The following environment variables are used by ios-usage-prometheus-exporter for configuration:
 
