@@ -6,7 +6,7 @@ It operates in a very similar fashion to Prometheus Pushgateway, however, due to
 
 ## What possible use case could you have for this?
 
-I created this as a fun little side project, primarily because I was bored. But I also wanted to track my usage of social media and make a conscious effort to reduce th amount of times I was opening my social media apps.
+I created this as a fun little side project, primarily because I was bored. But I also wanted to track my usage of social media and make a conscious effort to reduce the amount of times I was opening my social media apps. I use these metrics to graph my usage in Grafana.
 
 ## Supported Functions
 
@@ -14,7 +14,12 @@ Currently there is only one supported function type which is the `incTotalAppOpe
 
 ### `incTotalAppOpens` Endpoint
 
-TBD
+The `incTotalAppOpens` endpoint is used for incrementing a Prometheus Counter each time an application (or group of applications) are opened. Counter increments are performed by making a HTTP Get request via the iOS 13 `Get Contents of URL` action.
+
+These are exported via the `ios_app_open_total` Promethus Counter Metric. This metric has two labels:
+1. `deviceName`: Derived from the `deviceName` HTTP header, used for aggregating stats across multiple devices.
+2. `appName`: Derived from th `appName` HTTP header, used for identifying individual, or groups of applications.
+
 
 ## Deployment and Configuration
 
