@@ -18,7 +18,7 @@ The `incTotalAppOpens` endpoint is used for incrementing a Prometheus Counter ea
 
 These are exported via the `ios_app_open_total` Prometheus Counter Metric. This metric has two labels:
 1. `deviceName`: Derived from the `deviceName` HTTP header, used for aggregating stats across multiple devices.
-2. `appName`: Derived from th `appName` HTTP header, used for identifying individual, or groups of applications.
+2. `appName`: Derived from the `appName` HTTP header, used for identifying individual, or groups of applications.
 
 ### HTTP Request
 `GET https://<YOUR-FQDN>/api/v1.0/incTotalAppOpens/`
@@ -42,9 +42,16 @@ These are exported via the `ios_app_open_total` Prometheus Counter Metric. This 
 7. Open Instagram
 8. Validate success by running the `ios_app_open_total` Prometheus Query
 
+
+### Limitations
+* iOS 13 does not allow you to get the name of the application as a variable which can be used in a HTTP Request. Consequently you need to create a trigger for each application (or group of applications) that you wish to track.
+
+
 ## Deployment and Configuration
 
-ios-usage-prometheus-exporter is designed to be deployed in Kubernetes, 
+ios-usage-prometheus-exporter is designed to be deployed in Kubernetes.
+
+You do not need to build this container, it is available in the maynard-io-public Google Container Repository: [gcr.io/maynard-io-public/ios-usage-prometheus-exporter](https://gcr.io/maynard-io-public/ios-usage-prometheus-exporter)
 
 The API Webserver Port (defined by the `WEBSERVER_PORT` environment variable) should be exposed externally so that your iOS device can make API calls based on your defined triggers. It is strongly recommended that expose ios-usage-prometheus-exporter using HTTPS. SSL/TLS should be configured on your Load Balancer (or ingress if using something like ingress-nginx).
 
@@ -57,3 +64,5 @@ The following environment variables are used by ios-usage-prometheus-exporter fo
 | API_KEY               | A secure API Key that will be validated against the `apiKey` header in requests. **This should be created as a K8s secret.**  | None      | true      |
 | PROMETHEUS_PORT       | The port to use for the webserver that exposes the `/metrics` Prometheus endpoint.                                            | 9090      | false     |
 | WEBSERVER_PORT        | The port to use for the webserver that exposes the ios-usage-prometheus-exporter REST API                                     | 80        | false     |
+
+A docker-compose.yml file is contained in this repository for testing on your local machine.
